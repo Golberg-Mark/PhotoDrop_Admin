@@ -11,7 +11,7 @@ const BackIcon = () => {
   );
 };
 
-const StyledSvg = styled.svg<{ rotateDeg: number }>`
+const StyledSvg = styled.svg`
   cursor: pointer;
 `;
 
