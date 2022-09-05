@@ -7,12 +7,12 @@ import useInput from '@/hooks/useInput';
 import Button from '@/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAlbumAction } from '@/store/actions/userActions';
-import { Album } from '@/store/reducers/user';
 import { selectIsAlbumCreating } from '@/store/selectors/userSelector';
 import Loader from '@/components/Loader';
+import { HandleToggle } from '@/hooks/useToggle';
 
 interface Props {
-  hide: () => void
+  hide: HandleToggle
 }
 
 const CreateAlbum: React.FC<Props> = ({ hide }) => {
@@ -35,7 +35,7 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
   };
 
   return (
-    <Background onClick={hide}>
+    <Background onClick={() => hide(false)}>
       <ModalWindow onClick={(evt) => evt.stopPropagation()}>
         <Input value={name} onChange={setName} placeholder="Album Name" type="text" />
         <Input value={location} onChange={setLocation} placeholder="Location" type="text" />

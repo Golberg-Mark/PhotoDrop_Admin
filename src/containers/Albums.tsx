@@ -39,7 +39,7 @@ const Albums: React.FC<Props> = ({ isLoggedIn }) => {
   }, []);
 
   useEffect(() => {
-    if (isCreateModalVisible) toggleIsCreateModalVisible();
+    if (isCreateModalVisible) toggleIsCreateModalVisible(false);
   }, [albums]);
 
   return (
