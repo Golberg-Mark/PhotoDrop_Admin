@@ -1,0 +1,6 @@
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    NODE_ENV: 'production' | 'development',
+    API_URL: string
+  }
+}
