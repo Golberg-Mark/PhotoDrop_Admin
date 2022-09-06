@@ -14,7 +14,7 @@ const Background: React.FC<Props> = ({ onClick, children }) => {
 };
 
 const StyledBackground = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
