@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { MdPhotoLibrary } from 'react-icons/md';
 
 import { Album } from '@/store/reducers/user';
-import AlbumIcon from '@/icons/AlbumIcon';
 
 interface Props extends Album {
   onClick: () => void
@@ -11,7 +11,7 @@ interface Props extends Album {
 const AlbumItem: React.FC<Props> = ({ name, location, onClick }) => {
   return (
     <AlbumContainer onClick={onClick}>
-      <AlbumIcon />
+      <MdPhotoLibrary size={40} />
       <div>
         <AlbumName>{name}</AlbumName>
         <AlbumLocation>{location}</AlbumLocation>
@@ -22,14 +22,18 @@ const AlbumItem: React.FC<Props> = ({ name, location, onClick }) => {
 
 const AlbumContainer = styled.div`
   display: flex;
+  align-items: center;
   grid-gap: 20px;
-  margin: 0 auto 20px auto;
-  padding: 10px;
+  margin: 0 auto;
+  padding: 20px 10px;
   max-width: 800px;
   min-width: 500px;
-  border: 1px solid #333;
-  border-radius: 3px;
+  border-bottom: 1px solid #DDD;
   cursor: pointer;
+  
+  :last-child {
+    border-bottom: none;
+  }
 `;
 
 const AlbumName = styled.p`
@@ -42,10 +46,6 @@ const AlbumName = styled.p`
 const AlbumLocation = styled.p`
   font-size: 18px;
   overflow-wrap: anywhere;
-`;
-
-const AlbumDate = styled.p`
-  align-self: flex-end;
 `;
 
 export default AlbumItem;
