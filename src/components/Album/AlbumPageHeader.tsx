@@ -35,7 +35,7 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
             <div>
               <span>{album.date}</span>
               <span> • </span>
-              <PhotosCount>{`${album.photos.length}${photosCountStr}`}</PhotosCount>
+              <PhotosCount>{`${album.photos.length} ${photosCountStr}`}</PhotosCount>
             </div>
           ) : <span>{album.date}</span>}
         </AlbumInfo>
