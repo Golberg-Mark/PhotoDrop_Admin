@@ -24,8 +24,10 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
   };
 
   return (
-    <PageHeader onClick={goBack}>
-      <BackIcon />
+    <PageHeader>
+      <BackButton onClick={goBack}>
+        <BackIcon />
+      </BackButton>
       <InfoAndButton>
         <AlbumInfo>
           <AlbumName>{album.name}</AlbumName>
@@ -45,17 +47,20 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
 const PageHeader = styled.div`
   display: flex;
   align-items: center;
-  grid-gap: 70px;
   max-width: 1280px;
   padding: 19px 40px;
   border-bottom: 1px solid #F1F0EC;
+`;
+
+const BackButton = styled.div`
+  padding-right: 70px;
+  cursor: pointer;
 `;
 
 const InfoAndButton = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  grid-gap: 40px;
   width: 100%;
 `;
 
