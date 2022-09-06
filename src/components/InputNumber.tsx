@@ -60,6 +60,7 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
 
   useEffect(() => {
     if (loadingFinished) {
+      dispatch(userActions.setClients(null));
       setSelectedCode('+');
       setPhoneNumber('');
     }
