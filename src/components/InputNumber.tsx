@@ -8,13 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectClients } from '@/store/selectors/userSelector';
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 import { searchClientAction, userActions } from '@/store/actions/userActions';
-import { PhoneNumber } from '@/store/reducers/user';
+import { Client } from '@/store/reducers/user';
 
 interface Props {
   phonePosition: number,
   isFocused: boolean,
   loadingFinished: boolean,
-  onChange: (i: number, phoneObj: PhoneNumber) => void
+  onChange: (i: number, phoneObj: Client) => void
 }
 
 const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinished, onChange }) => {
@@ -45,7 +45,7 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
 
     if (phoneNum.length > 1) {
       dispatch(searchClientAction(selectedCode.replace('+', '%2B') + phoneNumber));
-    }
+    } else dispatch(userActions.setClients(null));
 
     if (clients && phoneNum === (clients[0].countryCode + clients[0].phoneNumber)) {
       toggleIsClientsVisible(false);
@@ -66,7 +66,7 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
     }
   }, [loadingFinished]);
 
-  const pickNumber = (number: PhoneNumber) => {
+  const pickNumber = (number: Client) => {
     setSelectedCode(number.countryCode);
     setPhoneNumber(number.phoneNumber);
     toggleIsClientsVisible(false);
@@ -82,7 +82,7 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
         <Clients ref={onClickOutside}>
           {clients.map((el) => (
             <li key={el.countryCode + el.phoneNumber} onClick={() => pickNumber(el)}>
-              {`${el.countryCode}${el.phoneNumber}`}
+              {`${el.countryCode} ${formatPhoneNumber(el.phoneNumber)}${el.name ? ` — ${el.name}` : ''}`}
             </li>
           ))}
         </Clients>
@@ -134,9 +134,11 @@ const Clients = styled.ul`
   top: 52px;
   right: 0;
   left: 0;
-  padding: 10px 0;
+  padding: 10px;
   height: auto;
   max-height: 240px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px 0 rgba(0,0,0,0.25);
   background-color: #fff;
   z-index: 1;
   

@@ -1,6 +1,6 @@
 import { State } from '@/store';
 import { createSelector, Selector } from 'reselect';
-import { Album, PhoneNumber, SelectedAlbum } from '@/store/reducers/user';
+import { Album, Client, SelectedAlbum } from '@/store/reducers/user';
 
 const userState = (state: State) => state.userReducer;
 
@@ -34,7 +34,7 @@ export const selectLoadedPhotosCount: Selector<State, number | null> = createSel
   ({ loadedPhotosCount }) => loadedPhotosCount
 );
 
-export const selectClients: Selector<State, PhoneNumber[] | null> = createSelector(
+export const selectClients: Selector<State, Client[] | null> = createSelector(
   userState,
   ({ clients }) => clients
 );

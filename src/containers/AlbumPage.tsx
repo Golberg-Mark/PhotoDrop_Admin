@@ -12,7 +12,7 @@ import InputNumber from '@/components/InputNumber';
 import Button from '@/components/Button';
 import useToggle from '@/hooks/useToggle';
 import SuccessIcon from '@/icons/SuccessIcon';
-import { PhoneNumber } from '@/store/reducers/user';
+import { Client } from '@/store/reducers/user';
 
 interface Props {
   isLoggedIn: boolean
@@ -21,7 +21,7 @@ interface Props {
 const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
   if (!isLoggedIn) return <Navigate to="/auth" replace />;
 
-  const [numbers, setNumbers] = useState<PhoneNumber[]>([{
+  const [numbers, setNumbers] = useState<Client[]>([{
     countryCode: '',
     phoneNumber: ''
   }]);
@@ -74,7 +74,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
     }
   }
 
-  const changeNumbers = (i: number, phoneObj: PhoneNumber) => {
+  const changeNumbers = (i: number, phoneObj: Client) => {
     setNumbers(prevState => {
       const newArr = [...prevState];
       newArr[i] = phoneObj;

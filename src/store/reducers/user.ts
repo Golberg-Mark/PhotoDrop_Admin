@@ -10,9 +10,10 @@ export interface SelectedAlbum extends Album {
   photos?: string[]
 }
 
-export interface PhoneNumber {
+export interface Client {
   countryCode: string,
-  phoneNumber: string
+  phoneNumber: string,
+  name?: string
 }
 
 interface UserState {
@@ -22,7 +23,7 @@ interface UserState {
   isHeaderVisible: boolean,
   isAlbumCreating: boolean,
   loadedPhotosCount: number | null,
-  clients: PhoneNumber[] | null
+  clients: Client[] | null
 }
 
 const InitialState: UserState = {
@@ -58,7 +59,7 @@ export class UserReducer extends ImmerReducer<UserState> {
     this.draftState.loadedPhotosCount = value;
   }
 
-  setClients(value: PhoneNumber[] | null) {
+  setClients(value: Client[] | null) {
     this.draftState.clients = value;
   }
 }
