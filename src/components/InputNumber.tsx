@@ -140,6 +140,7 @@ const Clients = styled.ul`
   border-radius: 10px;
   box-shadow: 0 5px 15px 0 rgba(0,0,0,0.25);
   background-color: #fff;
+  overflow-y: auto;
   z-index: 1;
   
   li {
