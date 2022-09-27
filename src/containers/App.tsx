@@ -78,16 +78,18 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <GlobalContainer>
-      <GlobalStyle />
+    <>
       <Header />
-      <Routes>
-        <Route path="/" element={<Albums isLoggedIn={isLoggedIn} />} />
-        <Route path="/:name" element={<AlbumPage isLoggedIn={isLoggedIn} />} />
-        <Route path="/auth" element={<Auth isLoggedIn={isLoggedIn} />} />
-      </Routes>
-      {errorMessage ? <ErrorModalWindow error={errorMessage} /> : ''}
-    </GlobalContainer>
+      <GlobalContainer>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<Albums isLoggedIn={isLoggedIn} />} />
+          <Route path="/:name" element={<AlbumPage isLoggedIn={isLoggedIn} />} />
+          <Route path="/auth" element={<Auth isLoggedIn={isLoggedIn} />} />
+        </Routes>
+        {errorMessage ? <ErrorModalWindow error={errorMessage} /> : ''}
+      </GlobalContainer>
+    </>
   );
 };
 
