@@ -48,7 +48,11 @@ const Container = styled.header<{ isVisible: boolean }>`
 const CreateAlbumButton = styled.div`
   position: absolute;
   top: 10px;
-  right: 40px;
+  right: 20px;
+  
+  @media (min-width: 768px) {
+    right: 40px;
+  }
 `;
 
 const PlusButton = styled.button`

@@ -203,11 +203,13 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   grid-gap: 10px;
+  max-width: 420px;
+  width: 100%;
 `;
 
 const StyledLabel = styled.label`
   padding: 17px;
-  width: 420px;
+  width: 100%;
   height: 50px;
   font-size: 18px;
   text-align: center;

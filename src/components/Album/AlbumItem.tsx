@@ -26,13 +26,16 @@ const AlbumContainer = styled.div`
   grid-gap: 20px;
   margin: 0 auto;
   padding: 20px 10px;
-  max-width: 800px;
-  min-width: 500px;
   border-bottom: 1px solid #DDD;
   cursor: pointer;
   
   :last-child {
     border-bottom: none;
+  }
+  
+  @media (min-width: 768px) {
+    max-width: 800px;
+    min-width: 500px;
   }
 `;
 

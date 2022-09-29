@@ -85,6 +85,7 @@ const Container = styled.section`
   justify-content: center;
   align-items: center;
   margin-top: -100px;
+  padding: 0 15px;
   height: 100%;
 `;
 

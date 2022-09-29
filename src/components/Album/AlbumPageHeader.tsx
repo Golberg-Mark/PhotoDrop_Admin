@@ -48,13 +48,22 @@ const PageHeader = styled.div`
   display: flex;
   align-items: center;
   max-width: 1280px;
-  padding: 19px 40px;
+  padding: 19px 15px;
   border-bottom: 1px solid #F1F0EC;
+  
+  @media (min-width: 768px) {
+    padding: 19px 40px;
+  }
 `;
 
 const BackButton = styled.div`
-  padding-right: 70px;
+  height: 17px;
+  padding-right: 15px;
   cursor: pointer;
+  
+  @media (min-width: 768px) {
+    padding-right: 70px;
+  }
 `;
 
 const InfoAndButton = styled.div`
@@ -66,8 +75,14 @@ const InfoAndButton = styled.div`
 
 const AlbumInfo = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: baseline;
-  grid-gap: 40px;
+  grid-gap: 10px;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    grid-gap: 40px;
+  }
 `;
 
 const AlbumName = styled.h2`

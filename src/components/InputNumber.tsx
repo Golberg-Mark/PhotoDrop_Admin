@@ -98,23 +98,24 @@ const StyledInputNumber = styled.div`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3.2fr;
+  max-width: 420px;
 `;
 
 const StyledPhoneInput = styled.input`
-  padding: 10px 20px;
+  padding: 10px 18px;
   height: 42px;
   border: 1px solid #ccc;
 
   :first-child {
-    width: 100px;
+    width: 100%;
     border-right: none;
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
   }
 
   :last-child {
-    width: 320px;
     border-top-right-radius: 100px;
     border-bottom-right-radius: 100px;
   }
