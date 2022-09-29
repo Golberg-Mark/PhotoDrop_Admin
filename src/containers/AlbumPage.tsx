@@ -109,12 +109,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
     }
   };
 
-  let photosCountStr = 'There is no photos yet';
   let uploadedPhotosCount = 'Upload';
-
-  if (album?.photos?.length) {
-    photosCountStr = album.photos.length > 1 ? 'photos' : 'photo';
-  }
 
   if (photos?.length) {
     uploadedPhotosCount += ` ${photos.length} ${photos.length > 1 ? 'photos' : 'photo'}`;
@@ -127,57 +122,54 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
   });
 
   return (
-    <>
-      {album ? <AlbumPageHeader album={album} photosCountStr={photosCountStr} /> : <></>}
-      <PageWrapper>
-        {album ? (
-          <PageContent>
-            <AddPhotosBlock>
-              {numbers.map((_, i) => (
-                <InputNumber
-                  phonePosition={i}
-                  isFocused={focusedInput ===  i}
-                  loadingFinished={isLoadingFinished}
-                  onChange={changeNumbers} key={`phone_${i}`}
-                />
-              ))}
-              <Button
-                isAlternativeStyle
-                onClick={addNewNumber}
-                disabled={!numbers[numbers.length - 1].phoneNumber.length && !numbers[numbers.length - 1].countryCode.length}
-              >
-                Add new number
-              </Button>
-            </AddPhotosBlock>
-            {!album.photos?.length ? <NoPhotos>{photosCountStr}</NoPhotos> : null}
-            <Buttons>
-              <StyledLabel>
-                Choose Photos
-                <input
-                  type="file"
-                  style={{ display: 'none' }}
-                  onChange={choosePhotos}
-                  multiple
-                />
-              </StyledLabel>
-              <Button disabled={!photos?.length || !correctNumbers.length} onClick={uploadPhoto}>
-                {uploadedPhotosCount}
-              </Button>
-            </Buttons>
-          </PageContent>
-        ) : <Loader />}
-        {loadedPhotosCount && photos ? (
-          <UploadedPhotos>
-            {`${loadedPhotosCount}/${photos.length}`}
-          </UploadedPhotos>
-        ) : null}
-        {isLoadingFinished ? (
-          <UploadedPhotos>
-            <SuccessIcon />
-          </UploadedPhotos>
-        ) : null}
-      </PageWrapper>
-    </>
+    <PageWrapper>
+      {album ? (
+        <PageContent>
+          <AddPhotosBlock>
+            {numbers.map((_, i) => (
+              <InputNumber
+                phonePosition={i}
+                isFocused={focusedInput ===  i}
+                loadingFinished={isLoadingFinished}
+                onChange={changeNumbers} key={`phone_${i}`}
+              />
+            ))}
+            <Button
+              isAlternativeStyle
+              onClick={addNewNumber}
+              disabled={!numbers[numbers.length - 1].phoneNumber.length && !numbers[numbers.length - 1].countryCode.length}
+            >
+              Add new number
+            </Button>
+          </AddPhotosBlock>
+          {!album.photos?.length ? <NoPhotos>There is mo photo yet</NoPhotos> : null}
+          <Buttons>
+            <StyledLabel>
+              Choose Photos
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                onChange={choosePhotos}
+                multiple
+              />
+            </StyledLabel>
+            <Button disabled={!photos?.length || !correctNumbers.length} onClick={uploadPhoto}>
+              {uploadedPhotosCount}
+            </Button>
+          </Buttons>
+        </PageContent>
+      ) : <Loader />}
+      {loadedPhotosCount && photos ? (
+        <UploadedPhotos>
+          {`${loadedPhotosCount}/${photos.length}`}
+        </UploadedPhotos>
+      ) : null}
+      {isLoadingFinished ? (
+        <UploadedPhotos>
+          <SuccessIcon />
+        </UploadedPhotos>
+      ) : null}
+    </PageWrapper>
   );
 };
 

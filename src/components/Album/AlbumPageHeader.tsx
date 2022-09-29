@@ -9,10 +9,10 @@ import BackIcon from '@/icons/BackIcon';
 
 interface Props {
   album: SelectedAlbum,
-  photosCountStr: string
+  photosCount?: number
 }
 
-const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
+const AlbumPageHeader: React.FC<Props> = ({ album, photosCount = 0 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,8 +23,14 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
     });
   };
 
+  let photosCountStr = 'There is no photos yet';
+
+  if (album?.photos?.length) {
+    photosCountStr = album.photos.length > 1 ? 'photos' : 'photo';
+  }
+
   return (
-    <PageHeader>
+    <>
       <BackButton onClick={goBack}>
         <BackIcon />
       </BackButton>
@@ -40,20 +46,26 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCountStr }) => {
           ) : <span>{album.date}</span>}
         </AlbumInfo>
       </InfoAndButton>
-    </PageHeader>
+    </>
   );
 };
 
 const PageHeader = styled.div`
   display: flex;
   align-items: center;
-  max-width: 1280px;
-  padding: 19px 15px;
+  padding: 18px 15px;
   border-bottom: 1px solid #F1F0EC;
   
   @media (min-width: 768px) {
     padding: 19px 40px;
   }
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  max-width: 1440px;
+  width: 100%;
 `;
 
 const BackButton = styled.div`

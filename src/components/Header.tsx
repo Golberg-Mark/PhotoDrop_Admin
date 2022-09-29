@@ -2,31 +2,41 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Logo from '@/icons/Logo';
 import { useSelector } from 'react-redux';
-import { selectAlbums, selectIsHeaderVisible } from '@/store/selectors/userSelector';
+import { selectAlbum, selectAlbums, selectIsHeaderVisible } from '@/store/selectors/userSelector';
 import { useLocation } from 'react-router';
 import useToggle from '@/hooks/useToggle';
 import CreateAlbum from '@/components/CreateAlbum';
+import AlbumPageHeader from '@/components/Album/AlbumPageHeader';
 
 const Header = () => {
   const [isCreateModalVisible, toggleIsCreateModalVisible] = useToggle();
   const { pathname } = useLocation();
   const isVisible = useSelector(selectIsHeaderVisible);
   const albums = useSelector(selectAlbums);
+  const selectedAlbum = useSelector(selectAlbum);
 
   useEffect(() => {
     toggleIsCreateModalVisible(false);
   }, [albums]);
 
-  return (
+  return selectedAlbum ? (
+    <Container isVisible>
+      <Content>
+        <AlbumPageHeader album={selectedAlbum} photosCount={selectedAlbum.photos?.length} />
+      </Content>
+    </Container>
+  ) : (
     <Container isVisible={isVisible}>
-      <Logo />
-      {pathname === '/' ? (
-        <CreateAlbumButton>
-          <PlusButton onClick={toggleIsCreateModalVisible}>
-            +
-          </PlusButton>
-        </CreateAlbumButton>
-      ) : ''}
+      <Content>
+        <Logo />
+        {pathname === '/' ? (
+          <CreateAlbumButton>
+            <PlusButton onClick={toggleIsCreateModalVisible}>
+              +
+            </PlusButton>
+          </CreateAlbumButton>
+        ) : ''}
+      </Content>
       {isCreateModalVisible ? <CreateAlbum hide={toggleIsCreateModalVisible} /> : null}
     </Container>
   );
@@ -36,19 +46,26 @@ const Container = styled.header<{ isVisible: boolean }>`
   display: ${({ isVisible }) => isVisible ? 'flex' : 'none'};
   justify-content: center;
   align-items: center;
-  padding: 19px 40px;
+  padding: 18px 40px;
   height: 60px;
   border-bottom: 1px solid #F1F0EC;
-  
-  div {
-    margin: 0 auto;
-  }
+`;
+
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1440px;
+  width: 100%;
 `;
 
 const CreateAlbumButton = styled.div`
   position: absolute;
-  top: 10px;
-  right: 20px;
+  top: -9px;
+  right: -20px;
+  user-select: none;
   
   @media (min-width: 768px) {
     right: 40px;
