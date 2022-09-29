@@ -10,21 +10,21 @@ import { createAlbumAction } from '@/store/actions/userActions';
 import { selectIsAlbumCreating } from '@/store/selectors/userSelector';
 import Loader from '@/components/Loader';
 import { HandleToggle } from '@/hooks/useToggle';
+import CloseIcon from '@/icons/CloseIcon';
 
 interface Props {
   hide: HandleToggle
 }
 
 const CreateAlbum: React.FC<Props> = ({ hide }) => {
-  const [name, setName] = useInput('', 20);
-  const [location, setLocation] = useInput('', 20);
+  const [name, setName] = useInput('', 100);
+  const [location, setLocation] = useInput('', 200);
   const [date, setDate] = useInput('', 10);
 
   const dispatch = useDispatch();
   const isCreating = useSelector(selectIsAlbumCreating);
 
   const areFieldsValid = name.length >= 3 && location.length >= 3 && date.length === 10;
-
 
   const createAlbumHandler = () => {
     dispatch(createAlbumAction({
@@ -37,6 +37,7 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
   return (
     <Background onClick={() => hide(false)}>
       <ModalWindow onClick={(evt) => evt.stopPropagation()}>
+        <CloseIcon stroke="#262626" onClick={() => hide(false)}/>
         <Input value={name} onChange={setName} placeholder="Album Name" type="text" />
         <Input value={location} onChange={setLocation} placeholder="Location" type="text" />
         <Input type="date" onChange={setDate} value={date} />
@@ -49,14 +50,31 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
 };
 
 const ModalWindow = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   grid-gap: 15px;
-  padding: 50px;
-  width: 500px;
+  padding: 50px 15px;
+  max-width: 500px;
+  width: 100%;
+  height: 100%;
   background-color: #fff;
   cursor: auto;
+  
+  svg {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+  }
+  
+  @media (min-width: 768px) {
+    padding: 50px;
+    height: auto;
+    border-radius: 20px;
+  }
 `;
 
 export default CreateAlbum;

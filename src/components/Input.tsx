@@ -20,6 +20,11 @@ const StyledInput = styled.input<{ width?: number }>`
   border-radius: 10px;
   border: 1px solid #EEE;
   background-color: #F4F4F4;
+  
+  :focus {
+    outline: none;
+    border-color: #3300CC;
+  }
 `;
 
 export default Input;
