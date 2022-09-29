@@ -45,7 +45,7 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
         <Input value={location} onChange={setLocation} placeholder="Location" type="text" />
         <Input type="date" onChange={setDate} value={date} />
         <Button disabled={!areFieldsValid} onClick={createAlbumHandler}>
-          {isCreating ? <Loader size={16} /> : 'Create Album'}
+          {isCreating ? <Loader /> : 'Create Album'}
         </Button>
       </ModalWindow>
     </Background>

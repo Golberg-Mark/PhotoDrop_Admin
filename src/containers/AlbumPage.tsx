@@ -28,6 +28,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
   const [photos, setPhotos] = useState<File[]>();
   const [focusedInput, setFocusedInput] = useState<number>();
   const [isLoadingFinished, toggleIsLoadingFinished] = useToggle();
+  const [isLoading, toggleIsLoading] = useToggle();
   const params = useParams();
   const dispatch = useDispatch();
   const album = useSelector(selectAlbum);
@@ -51,6 +52,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
 
   useEffect(() => {
     if (isLoadingFinished) {
+      toggleIsLoading(false);
       const timer = setTimeout(() => {
         toggleIsLoadingFinished(false);
         dispatch(getSelectedAlbumAction(album!.name));
@@ -98,6 +100,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
 
   const uploadPhoto = () => {
     if (photos?.length && correctNumbers.length && album) {
+      toggleIsLoading(true);
       const correctNumbers = numbers.filter((el) => el.countryCode !== '' && el.phoneNumber !== '');
 
       const body = {
@@ -154,7 +157,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
               />
             </StyledLabel>
             <Button disabled={!photos?.length || !correctNumbers.length} onClick={uploadPhoto}>
-              {uploadedPhotosCount}
+              {isLoading ? <Loader /> : uploadedPhotosCount }
             </Button>
           </Buttons>
         </PageContent>

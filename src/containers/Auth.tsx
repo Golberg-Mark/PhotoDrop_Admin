@@ -72,7 +72,7 @@ const Auth: React.FC<Props> = ({ isLoggedIn }) => {
         style={{ marginTop: '20px' }}
         onClick={submit}
       >
-        { isButtonPressed ? <Loader size={16}/> : 'Login' }
+        { isButtonPressed ? <Loader /> : 'Login' }
       </Button>
     </Container>
   );
