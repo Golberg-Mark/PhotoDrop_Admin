@@ -55,7 +55,6 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
       toggleIsLoading(false);
       const timer = setTimeout(() => {
         toggleIsLoadingFinished(false);
-        dispatch(getSelectedAlbumAction(album!.name));
       }, 2000);
 
       return () => {

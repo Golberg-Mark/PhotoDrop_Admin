@@ -105,6 +105,9 @@ export const uploadPhotoAction = (body: GetPreassignedUrlRequest, photos: File[]
           }
         }).then(__ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
+        }).catch(err => {
+          dispatch(errorActions.setErrorMessage(`Your photo "${photos[i].name}" wasn't loaded`));
+          dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
         });
       });
     }
