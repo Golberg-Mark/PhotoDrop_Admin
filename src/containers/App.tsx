@@ -99,7 +99,7 @@ const GlobalContainer = styled.section`
   flex-direction: column;
   margin: 0 auto;
   max-width: 1440px;
-  height: 100vh;
+  height: calc(100vh - 60px);
 `;
 
 export default App;
