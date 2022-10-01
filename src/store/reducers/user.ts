@@ -19,7 +19,7 @@ export interface Client {
 
 interface UserState {
   isLoggedIn: boolean,
-  albums: Album[],
+  albums: Album[] | null,
   selectedAlbum: SelectedAlbum | null,
   isHeaderVisible: boolean,
   isAlbumCreating: boolean,
@@ -29,7 +29,7 @@ interface UserState {
 
 const InitialState: UserState = {
   isLoggedIn: !!localStorage.getItem('token'),
-  albums: [],
+  albums: null,
   selectedAlbum: null,
   isHeaderVisible: true,
   isAlbumCreating: false,
@@ -44,7 +44,7 @@ export class UserReducer extends ImmerReducer<UserState> {
     if (!value) localStorage.removeItem('token');
   }
 
-  setAlbums(albums: Album[]) {
+  setAlbums(albums: Album[] | null) {
     this.draftState.albums = albums;
     this.draftState.isAlbumCreating = false;
   }

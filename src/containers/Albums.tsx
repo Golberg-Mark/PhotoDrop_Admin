@@ -18,11 +18,7 @@ const Albums = () => {
   };
 
   useEffect(() => {
-    dispatch(getAlbumsAction());
-
-    return () => {
-      dispatch(userActions.setAlbums([]));
-    }
+    if (!albums) dispatch(getAlbumsAction());
   }, []);
 
   return (
