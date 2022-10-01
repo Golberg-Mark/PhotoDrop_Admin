@@ -137,7 +137,7 @@ const AlbumPage = () => {
               Add new number
             </Button>
           </AddPhotosBlock>
-          {!album.countPhotos ? <NoPhotos>There is mo photo yet</NoPhotos> : null}
+          {!album.countPhotos ? <NoPhotos>There is no photo yet</NoPhotos> : null}
           <Buttons>
             <StyledLabel>
               Choose Photos
