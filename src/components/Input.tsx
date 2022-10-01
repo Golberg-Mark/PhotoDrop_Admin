@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string,
-  width?: number
+  width?: number,
+  value: string
 }
 
 const Input: React.FC<Props> = ({ label, width, ...props }) => {
@@ -12,7 +13,7 @@ const Input: React.FC<Props> = ({ label, width, ...props }) => {
   );
 };
 
-const StyledInput = styled.input<{ width?: number }>`
+const StyledInput = styled.input<{ width?: number, type?: string, value: string }>`
   padding: 15px 13px;
   width: 100%;
   max-width: ${({ width }) => `${width || 420}px`};
@@ -20,6 +21,7 @@ const StyledInput = styled.input<{ width?: number }>`
   border-radius: 10px;
   border: 1px solid #EEE;
   background-color: #F4F4F4;
+  letter-spacing: ${({ type, value }) => type === 'password' ? value?.length ? '-5px' : 'normal' : 'normal'};
   
   :focus {
     outline: none;
