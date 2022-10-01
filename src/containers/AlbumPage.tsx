@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import { selectAlbum, selectLoadedPhotosCount } from '@/store/selectors/userSelector';
 import PageWrapper from '@/components/PageWrapper';
 import Loader from '@/components/Loader';
 import { getSelectedAlbumAction, uploadPhotoAction, userActions } from '@/store/actions/userActions';
-import AlbumPageHeader from '@/components/Album/AlbumPageHeader';
 import InputNumber from '@/components/InputNumber';
 import Button from '@/components/Button';
 import useToggle from '@/hooks/useToggle';
 import SuccessIcon from '@/icons/SuccessIcon';
 import { Client } from '@/store/reducers/user';
 
-interface Props {
-  isLoggedIn: boolean
-}
-
-const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
-  if (!isLoggedIn) return <Navigate to="/auth" replace />;
-
+const AlbumPage = () => {
   const [numbers, setNumbers] = useState<Client[]>([{
     countryCode: '',
     phoneNumber: ''
@@ -35,7 +28,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
   const loadedPhotosCount = useSelector(selectLoadedPhotosCount);
 
   useEffect(() => {
-    dispatch(getSelectedAlbumAction(params.name!));
+    dispatch(getSelectedAlbumAction(params.id!));
   }, []);
 
   useEffect(() => {
@@ -144,7 +137,7 @@ const AlbumPage: React.FC<Props> = ({ isLoggedIn }) => {
               Add new number
             </Button>
           </AddPhotosBlock>
-          {!album.photos?.length ? <NoPhotos>There is mo photo yet</NoPhotos> : null}
+          {!album.countPhotos ? <NoPhotos>There is mo photo yet</NoPhotos> : null}
           <Buttons>
             <StyledLabel>
               Choose Photos

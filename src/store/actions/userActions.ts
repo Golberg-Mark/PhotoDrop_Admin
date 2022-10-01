@@ -6,6 +6,7 @@ import { AsyncAction } from '@/store/actions/common';
 import { errorActions } from '@/store/actions/errorActions';
 import { GetPreassignedUrlRequest } from '@/api/mainApiProtected';
 import axios from 'axios';
+import { push } from '@lagunovsky/redux-react-router';
 
 export const userActions = createActionCreators(UserReducer);
 
@@ -26,8 +27,9 @@ export const loginAction  = (data: LoginData): AsyncAction => async (
     const { token } = await mainApi.login(data);
 
     if (token) {
-      dispatch(userActions.setIsLoggedIn(true));
       localStorage.setItem('token', token);
+      dispatch(userActions.setIsLoggedIn(true));
+      dispatch(push('/'));
     }
   } catch (error: any) {
     const message = error.code === 400 ? 'Invalid username or password' : error.message;
@@ -57,11 +59,11 @@ export const createAlbumAction = (album: Album): AsyncAction => async (
 ) => {
   try {
     dispatch(userActions.setIsAlbumCreating(true));
-    const { message } = await mainApiProtected.createAlbum(album);
+    const newAlbum = await mainApiProtected.createAlbum(album);
 
-    if (message) {
+    if (newAlbum) {
       const { albums } = getState().userReducer;
-      const updatedAlbums = [...albums, album].sort((a, b) => a.name.localeCompare(b.name));
+      const updatedAlbums = [newAlbum, ...albums];
       dispatch(userActions.setAlbums(updatedAlbums));
     }
   } catch (error: any) {

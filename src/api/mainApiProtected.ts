@@ -23,7 +23,7 @@ export class MainApiProtected extends HttpClientProtected {
 
   public getAlbum = (albumName: string) => this.instance.get<SelectedAlbum>(`/albums/${albumName}`);
 
-  public createAlbum = (album: Album) => this.instance.post<{ message: string }>(`/albums`, album);
+  public createAlbum = (album: Album) => this.instance.post<Album>(`/albums`, album);
 
   public getPreassignedUrl = (body: GetPreassignedUrlRequest, albumName: string) => (
     this.instance.post<GetPreassignedUrlRequest, string[]>(`/getPresignedUrl/${albumName}`, body)

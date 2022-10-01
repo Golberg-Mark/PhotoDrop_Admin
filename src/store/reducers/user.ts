@@ -3,11 +3,12 @@ import { ImmerReducer, createReducerFunction } from 'immer-reducer';
 export interface Album {
   name: string,
   location: string,
-  date: string
+  date: string,
+  id: string
 }
 
 export interface SelectedAlbum extends Album {
-  photos?: string[]
+  countPhotos: number
 }
 
 export interface Client {
@@ -27,7 +28,7 @@ interface UserState {
 }
 
 const InitialState: UserState = {
-  isLoggedIn: false,
+  isLoggedIn: !!localStorage.getItem('token'),
   albums: [],
   selectedAlbum: null,
   isHeaderVisible: true,
@@ -39,6 +40,8 @@ const InitialState: UserState = {
 export class UserReducer extends ImmerReducer<UserState> {
   setIsLoggedIn(value: boolean) {
     this.draftState.isLoggedIn = value;
+
+    if (!value) localStorage.removeItem('token');
   }
 
   setAlbums(albums: Album[]) {

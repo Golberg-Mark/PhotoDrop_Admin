@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import { normalize } from 'styled-normalize';
 
 import Albums from '@/containers/Albums';
 import Auth from '@/containers/Auth';
-import { selectIsLoggedIn } from '@/store/selectors/userSelector';
 import Header from '@/components/Header';
 import FuturaPtRegular from '@/fonts/futura-pt-book.ttf';
 import FuturaPtBold from '@/fonts/futura-pt-bold.ttf';
@@ -14,7 +13,7 @@ import FuturaPtMedium from '@/fonts/futura-pt-medium.ttf';
 import AlbumPage from '@/containers/AlbumPage';
 import { selectErrorMessage } from '@/store/selectors/errorSelector';
 import ErrorModalWindow from '@/containers/ErrorModalWindow';
-import { userActions } from '@/store/actions/userActions';
+import ProtectedRouter from '@/containers/ProtectedRouter';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize};
@@ -67,15 +66,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
   const errorMessage = useSelector(selectErrorMessage);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (token) dispatch(userActions.setIsLoggedIn(true));
-  }, []);
 
   return (
     <>
@@ -83,9 +74,9 @@ const App: React.FC = () => {
       <GlobalContainer>
         <GlobalStyle />
         <Routes>
-          <Route path="/" element={<Albums isLoggedIn={isLoggedIn} />} />
-          <Route path="/:name" element={<AlbumPage isLoggedIn={isLoggedIn} />} />
-          <Route path="/auth" element={<Auth isLoggedIn={isLoggedIn} />} />
+          <Route path="/" element={<ProtectedRouter><Albums /></ProtectedRouter>} />
+          <Route path="/:id" element={<ProtectedRouter><AlbumPage /></ProtectedRouter>} />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
         {errorMessage ? <ErrorModalWindow error={errorMessage} /> : ''}
       </GlobalContainer>

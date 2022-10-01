@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAlbumsAction, userActions } from '@/store/actions/userActions';
@@ -8,22 +8,13 @@ import AlbumItem from '@/components/Album/AlbumItem';
 import Loader from '@/components/Loader';
 import PageWrapper from '@/components/PageWrapper';
 
-interface Props {
-  isLoggedIn: boolean
-}
-
-const Albums: React.FC<Props> = ({ isLoggedIn }) => {
-  if (!isLoggedIn) return <Navigate to="/auth" replace />;
-
+const Albums = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const albums = useSelector(selectAlbums);
 
-  const onAlbumClick = (albumName: string) => {
-    navigate(`/${albumName}`, {
-      replace: false,
-      state: albumName
-    });
+  const onAlbumClick = (id: string) => {
+    navigate(`/${id}`);
   };
 
   useEffect(() => {
@@ -41,10 +32,11 @@ const Albums: React.FC<Props> = ({ isLoggedIn }) => {
           {albums.map((el, i) => (
             <AlbumItem
               key={`${el.name}_${i}`}
+              id={el.id}
               name={el.name}
               location={el.location}
               date={el.date}
-              onClick={() => onAlbumClick(el.name)}
+              onClick={() => onAlbumClick(el.id)}
             />
           ))}
         </>

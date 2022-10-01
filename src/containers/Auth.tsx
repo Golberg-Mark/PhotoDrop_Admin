@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Navigate } from 'react-router';
 
-import Header from '@/components/Header';
 import Input from '@/components/Input';
 import useInput from '@/hooks/useInput';
 import Button from '@/components/Button';
@@ -11,12 +9,7 @@ import { loginAction } from '@/store/actions/userActions';
 import Loader from '@/components/Loader';
 import { selectErrorMessage } from '@/store/selectors/errorSelector';
 
-interface Props {
-  isLoggedIn: boolean
-}
-
-const Auth: React.FC<Props> = ({ isLoggedIn }) => {
-  if (isLoggedIn) return <Navigate to="/" replace />
+const Auth = () => {
   const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [email, setEmail] = useInput('', 20);
   const [password, setPassword] = useInput('', 20);
