@@ -22,14 +22,14 @@ const Header = () => {
   return selectedAlbum ? (
     <Container isVisible>
       <Content>
-        <AlbumPageHeader album={selectedAlbum} photosCount={selectedAlbum.photos?.length} />
+        <AlbumPageHeader album={selectedAlbum} photosCount={selectedAlbum.countPhotos} />
       </Content>
     </Container>
   ) : (
     <Container isVisible={isVisible}>
       <Content>
         <Logo />
-        {pathname === '/' ? (
+        {pathname === '/' && albums ? (
           <CreateAlbumButton>
             <PlusButton onClick={toggleIsCreateModalVisible}>
               +

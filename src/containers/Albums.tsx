@@ -23,7 +23,7 @@ const Albums = () => {
 
   return (
     <PageWrapper>
-      {albums?.length ? (
+      {albums && albums.length >= 0 ? (
         <>
           {albums.map((el, i) => (
             <AlbumItem

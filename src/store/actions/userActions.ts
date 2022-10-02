@@ -45,7 +45,7 @@ export const getAlbumsAction = (): AsyncAction => async (
   try {
     const albums: Album[] = await mainApiProtected.getAlbums();
 
-    if (albums.length) dispatch(userActions.setAlbums(albums));
+    if (albums) dispatch(userActions.setAlbums(albums));
   } catch (error: any) {
     console.log(error);
     if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
@@ -63,7 +63,11 @@ export const createAlbumAction = (album: Album): AsyncAction => async (
 
     if (newAlbum) {
       const { albums } = getState().userReducer;
-      const updatedAlbums = [newAlbum, ...albums];
+      let updatedAlbums;
+
+      if (albums) updatedAlbums = [newAlbum, ...albums];
+      else updatedAlbums = [newAlbum
+      ]
       dispatch(userActions.setAlbums(updatedAlbums));
     }
   } catch (error: any) {
