@@ -4,7 +4,6 @@ import { Album, PhoneNumber, SelectedAlbum, UserReducer } from '@/store/reducers
 import { LoginData } from '@/api/mainApi';
 import { AsyncAction } from '@/store/actions/common';
 import { errorActions } from '@/store/actions/errorActions';
-import { GetPreassignedUrlRequest } from '@/api/mainApiProtected';
 import axios from 'axios';
 import { push } from '@lagunovsky/redux-react-router';
 
