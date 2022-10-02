@@ -51,7 +51,7 @@ export const getAlbumsAction = (): AsyncAction => async (
   }
 };
 
-export const createAlbumAction = (album: Album): AsyncAction => async (
+export const createAlbumAction = (album: Omit<Album, 'id'>): AsyncAction => async (
   dispatch,
   getState,
   { mainApiProtected }
