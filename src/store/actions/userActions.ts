@@ -1,6 +1,6 @@
 import { createActionCreators } from 'immer-reducer';
 
-import { Album, SelectedAlbum, UserReducer } from '@/store/reducers/user';
+import { Album, PhoneNumber, SelectedAlbum, UserReducer } from '@/store/reducers/user';
 import { LoginData } from '@/api/mainApi';
 import { AsyncAction } from '@/store/actions/common';
 import { errorActions } from '@/store/actions/errorActions';
@@ -92,30 +92,43 @@ export const getSelectedAlbumAction = (albumName: string): AsyncAction => async 
   }
 };
 
-export const uploadPhotoAction = (body: GetPreassignedUrlRequest, photos: File[], name: string): AsyncAction => async (
+export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: string): AsyncAction => async (
   dispatch,
   _,
   { mainApiProtected }
 ) => {
   try {
-    const urls = await mainApiProtected.getPreassignedUrl(body, name);
+    let loadedPhotosCount = 0;
+    let photoWithErrors = '';
+    let photoWithErrorsAmount = 0;
+    dispatch(userActions.setLoadedPhotosCount(loadedPhotosCount));
 
-    if (urls.length) {
-      let loadedPhotosCount = 0;
-      dispatch(userActions.setLoadedPhotosCount(loadedPhotosCount));
+    for (const photo of photos) {
+      const i = photos.indexOf(photo);
+      const url = await mainApiProtected.getPreassignedUrl({ contentType: photo.type, numbers }, id);
 
-      urls.forEach((url, i) => {
-        axios.put(url, photos[i], {
+      if (url) {
+        axios.put(url, photo, {
           headers: {
-            'Content-Type': photos[i].type
+            'Content-Type': photo.type
           }
         }).then(__ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
+          if (i === photos.length - 1 && photoWithErrors.length) {
+            photoWithErrors = `Your photos ${photoWithErrors.substring(-2, 0)} weren't loaded`;
+            dispatch(errorActions.setErrorMessage(photoWithErrors));
+          }
         }).catch(err => {
-          dispatch(errorActions.setErrorMessage(`Your photo "${photos[i].name}" wasn't loaded`));
+          photoWithErrors += `"${photo.name}", `;
+          ++photoWithErrorsAmount;
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
+
+          if (i === photos.length - 1 && photoWithErrors.length) {
+            photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
+            dispatch(errorActions.setErrorMessage(photoWithErrors));
+          }
         });
-      });
+      }
     }
   } catch (error: any) {
     console.log(error);

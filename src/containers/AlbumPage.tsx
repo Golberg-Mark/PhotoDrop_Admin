@@ -29,6 +29,10 @@ const AlbumPage = () => {
 
   useEffect(() => {
     dispatch(getSelectedAlbumAction(params.id!));
+
+    return () => {
+      dispatch(userActions.setSelectedAlbum(null));
+    }
   }, []);
 
   useEffect(() => {
@@ -95,12 +99,7 @@ const AlbumPage = () => {
       toggleIsLoading(true);
       const correctNumbers = numbers.filter((el) => el.countryCode !== '' && el.phoneNumber !== '');
 
-      const body = {
-        amount: photos.length,
-        numbers: correctNumbers
-      };
-
-      dispatch(uploadPhotoAction(body, photos, album.name));
+      dispatch(uploadPhotoAction(correctNumbers, photos, album.id));
     }
   };
 

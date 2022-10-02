@@ -11,9 +11,12 @@ export interface SelectedAlbum extends Album {
   countPhotos: number
 }
 
-export interface Client {
+export interface PhoneNumber {
   countryCode: string,
-  phoneNumber: string,
+  phoneNumber: string
+}
+
+export interface Client extends PhoneNumber {
   name?: string
 }
 

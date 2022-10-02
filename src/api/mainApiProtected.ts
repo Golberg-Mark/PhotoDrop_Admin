@@ -2,7 +2,7 @@ import { HttpClientProtected } from '@/api/httpClientProtected';
 import { Album, Client, SelectedAlbum } from '@/store/reducers/user';
 
 export interface GetPreassignedUrlRequest {
-  amount: number,
+  contentType: string,
   numbers: Client[]
 }
 
@@ -26,7 +26,7 @@ export class MainApiProtected extends HttpClientProtected {
   public createAlbum = (album: Album) => this.instance.post<Album>(`/albums`, album);
 
   public getPreassignedUrl = (body: GetPreassignedUrlRequest, albumName: string) => (
-    this.instance.post<GetPreassignedUrlRequest, string[]>(`/getPresignedUrl/${albumName}`, body)
+    this.instance.post<GetPreassignedUrlRequest, string>(`/getPresignedUrl/${albumName}`, body)
   );
 
   public searchClient = (number: string) => this.instance.get<Client[]>(`searchClient?contains=${number}`);

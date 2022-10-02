@@ -9,10 +9,10 @@ import BackIcon from '@/icons/BackIcon';
 
 interface Props {
   album: SelectedAlbum,
-  photosCount?: number
+  photosCount: number
 }
 
-const AlbumPageHeader: React.FC<Props> = ({ album, photosCount = 0 }) => {
+const AlbumPageHeader: React.FC<Props> = ({ album, photosCount }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,9 +25,7 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCount = 0 }) => {
 
   let photosCountStr = 'There is no photos yet';
 
-  if (album?.photos?.length) {
-    photosCountStr = album.photos.length > 1 ? 'photos' : 'photo';
-  }
+  if (photosCount) photosCountStr = photosCount > 1 ? 'photos' : 'photo';
 
   return (
     <>
@@ -37,11 +35,11 @@ const AlbumPageHeader: React.FC<Props> = ({ album, photosCount = 0 }) => {
       <InfoAndButton>
         <AlbumInfo>
           <AlbumName>{album.name}</AlbumName>
-          {album.photos?.length ? (
+          {photosCount ? (
             <div>
               <span>{album.date}</span>
               <span> • </span>
-              <PhotosCount>{`${album.photos.length} ${photosCountStr}`}</PhotosCount>
+              <PhotosCount>{`${photosCount} ${photosCountStr}`}</PhotosCount>
             </div>
           ) : <span>{album.date}</span>}
         </AlbumInfo>
