@@ -104,7 +104,11 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
 
     for (const photo of photos) {
       const i = photos.indexOf(photo);
-      const url = await mainApiProtected.getPreassignedUrl({ contentType: photo.type, numbers }, id);
+      const url = await mainApiProtected.getPreassignedUrl({
+        contentType: photo.type,
+        isLast: i === photos.length - 1,
+        numbers
+      }, id);
 
       if (url) {
         axios.put(url, photo, {

@@ -3,7 +3,8 @@ import { Album, Client, SelectedAlbum } from '@/store/reducers/user';
 
 export interface GetPreassignedUrlRequest {
   contentType: string,
-  numbers: Client[]
+  numbers: Client[],
+  isLast: boolean
 }
 
 export class MainApiProtected extends HttpClientProtected {
