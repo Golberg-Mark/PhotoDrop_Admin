@@ -19,27 +19,35 @@ const Header = () => {
     toggleIsCreateModalVisible(false);
   }, [albums]);
 
-  return selectedAlbum ? (
-    <Container isVisible>
-      <Content>
-        <AlbumPageHeader album={selectedAlbum} photosCount={selectedAlbum.countPhotos} />
-      </Content>
-    </Container>
-  ) : (
-    <Container isVisible={isVisible}>
-      <Content>
-        <Logo />
-        {pathname === '/' && albums ? (
-          <CreateAlbumButton>
-            <PlusButton onClick={toggleIsCreateModalVisible}>
-              +
-            </PlusButton>
-          </CreateAlbumButton>
-        ) : ''}
-      </Content>
-      {isCreateModalVisible ? <CreateAlbum hide={toggleIsCreateModalVisible} /> : null}
-    </Container>
-  );
+  const getContent = () => {
+    const isAlbum = new RegExp(/^\/album\/.*$/).test(pathname);
+
+    if (selectedAlbum && isAlbum) return (
+      <Container isVisible>
+        <Content>
+          <AlbumPageHeader album={selectedAlbum} photosCount={selectedAlbum.countPhotos} />
+        </Content>
+      </Container>
+    );
+
+    if (!isAlbum ) return (
+      <Container isVisible={isVisible}>
+        <Content>
+          <Logo />
+          {pathname === '/' && albums ? (
+            <CreateAlbumButton>
+              <PlusButton onClick={toggleIsCreateModalVisible}>
+                +
+              </PlusButton>
+            </CreateAlbumButton>
+          ) : ''}
+        </Content>
+        {isCreateModalVisible ? <CreateAlbum hide={toggleIsCreateModalVisible} /> : null}
+      </Container>
+    );
+  };
+
+  return getContent();
 };
 
 const Container = styled.header<{ isVisible: boolean }>`

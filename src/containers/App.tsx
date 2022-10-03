@@ -75,7 +75,7 @@ const App: React.FC = () => {
         <GlobalStyle />
         <Routes>
           <Route path="/" element={<ProtectedRouter><Albums /></ProtectedRouter>} />
-          <Route path="/:id" element={<ProtectedRouter><AlbumPage /></ProtectedRouter>} />
+          <Route path="/album/:id" element={<ProtectedRouter><AlbumPage /></ProtectedRouter>} />
           <Route path="/auth" element={<Auth />} />
         </Routes>
         {errorMessage ? <ErrorModalWindow error={errorMessage} /> : ''}
