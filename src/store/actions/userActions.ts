@@ -117,8 +117,11 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
 
     for (const photo of photos) {
       const i = photos.indexOf(photo);
+      const splitName = photo.name.split('.');
+      const contentType = photo.type || `image/${splitName[splitName.length - 1]}`;
+
       const url = await mainApiProtected.getPreassignedUrl({
-        contentType: photo.type,
+        contentType,
         isLast: i === photos.length - 1,
         numbers
       }, id);
@@ -126,7 +129,7 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
       if (url) {
         axios.put(url, photo, {
           headers: {
-            'Content-Type': photo.type
+            'Content-Type': contentType
           }
         }).then(__ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
