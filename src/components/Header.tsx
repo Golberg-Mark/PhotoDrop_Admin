@@ -47,7 +47,7 @@ const Header = () => {
     );
   };
 
-  return getContent();
+  return <>getContent()</>;
 };
 
 const Container = styled.header<{ isVisible: boolean }>`
