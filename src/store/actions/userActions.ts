@@ -93,7 +93,7 @@ export const getSelectedAlbumAction = (albumName: string): AsyncAction => async 
 
 export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: string): AsyncAction => async (
   dispatch,
-  _,
+  getState,
   { mainApiProtected }
 ) => {
   try {
@@ -101,6 +101,19 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
     let photoWithErrors = '';
     let photoWithErrorsAmount = 0;
     dispatch(userActions.setLoadedPhotosCount(loadedPhotosCount));
+
+    const lastPhotoLoaded = () => {
+      if (photoWithErrors.length) {
+        photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
+        dispatch(errorActions.setErrorMessage(photoWithErrors));
+      }
+
+      const { selectedAlbum } = getState().userReducer;
+      dispatch(userActions.setSelectedAlbum({
+        ...selectedAlbum,
+        countPhotos: selectedAlbum!.countPhotos + loadedPhotosCount - photoWithErrorsAmount
+      } as SelectedAlbum));
+    };
 
     for (const photo of photos) {
       const i = photos.indexOf(photo);
@@ -117,19 +130,13 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
           }
         }).then(__ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
-          if (i === photos.length - 1 && photoWithErrors.length) {
-            photoWithErrors = `Your photos ${photoWithErrors.substring(-2, 0)} weren't loaded`;
-            dispatch(errorActions.setErrorMessage(photoWithErrors));
-          }
+          if (i === photos.length - 1) lastPhotoLoaded();
         }).catch(err => {
           photoWithErrors += `"${photo.name}", `;
           ++photoWithErrorsAmount;
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
 
-          if (i === photos.length - 1 && photoWithErrors.length) {
-            photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
-            dispatch(errorActions.setErrorMessage(photoWithErrors));
-          }
+          if (i === photos.length - 1) lastPhotoLoaded();
         });
       }
     }
