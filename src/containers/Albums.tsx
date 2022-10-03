@@ -7,6 +7,7 @@ import { selectAlbums } from '@/store/selectors/userSelector';
 import AlbumItem from '@/components/Album/AlbumItem';
 import Loader from '@/components/Loader';
 import PageWrapper from '@/components/PageWrapper';
+import styled from 'styled-components';
 
 const Albums = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Albums = () => {
   const albums = useSelector(selectAlbums);
 
   const onAlbumClick = (id: string) => {
-    navigate(`/${id}`);
+    navigate(`/album/${id}`);
   };
 
   useEffect(() => {
@@ -23,22 +24,35 @@ const Albums = () => {
 
   return (
     <PageWrapper>
-      {albums && albums.length >= 0 ? (
+      {albums ? (
         <>
-          {albums.map((el, i) => (
-            <AlbumItem
-              key={`${el.name}_${i}`}
-              id={el.id}
-              name={el.name}
-              location={el.location}
-              date={el.date}
-              onClick={() => onAlbumClick(el.id)}
-            />
-          ))}
+          {albums.length ? (
+            <>
+              {albums.map((el, i) => (
+                  <AlbumItem
+                    key={`${el.name}_${i}`}
+                    id={el.id}
+                    name={el.name}
+                    location={el.location}
+                    date={el.date}
+                    onClick={() => onAlbumClick(el.id)}
+                  />
+                ))}
+            </>
+            ) : <EmptyAlbums>There is no album</EmptyAlbums>}
         </>
       ) : <Loader />}
     </PageWrapper>
   );
 };
+
+const EmptyAlbums = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 60px);
+  font-size: 24px;
+  font-weight: 500;
+`;
 
 export default Albums;
