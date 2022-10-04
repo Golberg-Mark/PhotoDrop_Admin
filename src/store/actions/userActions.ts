@@ -103,16 +103,18 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
     dispatch(userActions.setLoadedPhotosCount(loadedPhotosCount));
 
     const lastPhotoLoaded = () => {
-      if (photoWithErrors.length) {
-        photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
-        dispatch(errorActions.setErrorMessage(photoWithErrors));
-      }
+      setTimeout(() => {
+        if (photoWithErrors.length) {
+          photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
+          dispatch(errorActions.setErrorMessage(photoWithErrors));
+        }
 
-      const { selectedAlbum } = getState().userReducer;
-      dispatch(userActions.setSelectedAlbum({
-        ...selectedAlbum,
-        countPhotos: selectedAlbum!.countPhotos + loadedPhotosCount - photoWithErrorsAmount
-      } as SelectedAlbum));
+        const { selectedAlbum } = getState().userReducer;
+        dispatch(userActions.setSelectedAlbum({
+          ...selectedAlbum,
+          countPhotos: selectedAlbum!.countPhotos + loadedPhotosCount - photoWithErrorsAmount
+        } as SelectedAlbum));
+      }, 1000);
     };
 
     for (const photo of photos) {
