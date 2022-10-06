@@ -4,7 +4,7 @@ import HttpClient from '@/api/httpClient';
 
 export class HttpClientProtected extends HttpClient {
   constructor() {
-    super('https://14agml0pn4.execute-api.us-east-1.amazonaws.com/dev');
+    super(process.env.API_URL);
 
     this.initializeInterceptors();
   }
