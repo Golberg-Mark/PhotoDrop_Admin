@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Input from '@/components/Input';
@@ -21,7 +21,9 @@ const Auth = () => {
     (email.length && email.length <= 20)
     && (password.length && password.length <= 20 && password.length >= 8));
 
-  const submit = () => {
+  const submit = (evt?: FormEvent<HTMLFormElement>) => {
+    if (evt) evt.preventDefault();
+
     if (isFormCorrect) {
       setIsButtonPressed(true);
       dispatch(loginAction({ username: email, password }));
@@ -45,7 +47,7 @@ const Auth = () => {
   }, [errorMessage]);
 
   return (
-    <Container>
+    <Container onSubmit={submit}>
       <Input
         value={email}
         onChange={setEmail}
@@ -62,8 +64,8 @@ const Auth = () => {
       />
       <Button
         disabled={!isFormCorrect}
+        type="submit"
         style={{ marginTop: '20px' }}
-        onClick={submit}
       >
         { isButtonPressed ? <Loader /> : 'Login' }
       </Button>
@@ -71,7 +73,7 @@ const Auth = () => {
   );
 };
 
-const Container = styled.section`
+const Container = styled.form`
   display: flex;
   flex-direction: column;
   grid-gap: 10px;

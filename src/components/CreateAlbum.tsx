@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import styled from 'styled-components';
 
 import Background from '@/components/Background';
@@ -29,7 +29,9 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
 
   const areFieldsValid = name.length >= 3 && location.length >= 3 && date.length === 10;
 
-  const createAlbumHandler = () => {
+  const createAlbumHandler = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
     dispatch(createAlbumAction({
       name,
       location,
@@ -39,12 +41,12 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
 
   return (
     <Background onClick={() => hide(false)}>
-      <ModalWindow onClick={(evt) => evt.stopPropagation()}>
+      <ModalWindow onClick={(evt) => evt.stopPropagation()} onSubmit={createAlbumHandler}>
         <CloseIcon stroke="#262626" onClick={() => hide(false)}/>
         <Input value={name} onChange={setName} placeholder="Album Name" type="text" />
         <Input value={location} onChange={setLocation} placeholder="Location" type="text" />
         <Input type="date" onChange={setDate} value={date} />
-        <Button disabled={!areFieldsValid} onClick={createAlbumHandler}>
+        <Button disabled={!areFieldsValid} type="submit">
           {isCreating ? <Loader /> : 'Create Album'}
         </Button>
       </ModalWindow>
@@ -52,7 +54,7 @@ const CreateAlbum: React.FC<Props> = ({ hide }) => {
   );
 };
 
-const ModalWindow = styled.div`
+const ModalWindow = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;

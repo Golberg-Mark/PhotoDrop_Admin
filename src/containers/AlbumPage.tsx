@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
@@ -95,7 +95,9 @@ const AlbumPage = () => {
     dispatch(userActions.setClients(null));
   };
 
-  const uploadPhoto = () => {
+  const uploadPhoto = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
     if (photos?.length && correctNumbers.length && album) {
       toggleIsLoading(true);
       const correctNumbers = numbers.filter((el) => el.countryCode !== '' && el.phoneNumber !== '');
@@ -119,7 +121,7 @@ const AlbumPage = () => {
   return (
     <PageWrapper>
       {album ? (
-        <PageContent>
+        <PageContent onSubmit={uploadPhoto}>
           <AddPhotosBlock>
             {numbers.map((_, i) => (
               <InputNumber
@@ -149,7 +151,7 @@ const AlbumPage = () => {
                 multiple
               />
             </StyledLabel>
-            <Button disabled={!photos?.length || !correctNumbers.length} onClick={uploadPhoto}>
+            <Button disabled={!photos?.length || !correctNumbers.length} type="submit">
               {isLoading ? <Loader /> : uploadedPhotosCount }
             </Button>
           </Buttons>
@@ -169,7 +171,7 @@ const AlbumPage = () => {
   );
 };
 
-const PageContent = styled.div`
+const PageContent = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
