@@ -15,6 +15,7 @@
     "history": "^5.3.0",
     "immer-reducer": "^0.7.13",
     "react": "^18.2.0",
+    "react-content-loader": "^6.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-redux": "7.2.8",

@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAlbumsAction, userActions } from '@/store/actions/userActions';
+import { getAlbumsAction } from '@/store/actions/userActions';
 import { selectAlbums } from '@/store/selectors/userSelector';
 import AlbumItem from '@/components/Album/AlbumItem';
-import Loader from '@/components/Loader';
 import PageWrapper from '@/components/PageWrapper';
 import styled from 'styled-components';
+import AlbumsSkeleton from '@/components/AlbumsSkeleton';
 
 const Albums = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const Albums = () => {
             </>
             ) : <EmptyAlbums>There is no album</EmptyAlbums>}
         </>
-      ) : <Loader />}
+      ) : <AlbumsSkeleton />}
     </PageWrapper>
   );
 };
