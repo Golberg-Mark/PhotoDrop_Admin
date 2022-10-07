@@ -40,6 +40,7 @@ const StyledButton = styled.button<{ width: number, isAlternativeStyle: boolean 
   
   :disabled {
     opacity: .33;
+    cursor: default;
   }
   
   ${({ isAlternativeStyle }) => isAlternativeStyle ? css`
