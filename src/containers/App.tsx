@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled, { createGlobalStyle } from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { normalize } from 'styled-normalize';
 
 import Albums from '@/containers/Albums';
@@ -14,6 +14,7 @@ import AlbumPage from '@/containers/AlbumPage';
 import { selectErrorMessage } from '@/store/selectors/errorSelector';
 import ErrorModalWindow from '@/containers/ErrorModalWindow';
 import ProtectedRouter from '@/containers/ProtectedRouter';
+import { selectIsLoggedIn } from '@/store/selectors/userSelector';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize};
@@ -66,6 +67,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const errorMessage = useSelector(selectErrorMessage);
 
   return (
@@ -76,7 +78,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<ProtectedRouter><Albums /></ProtectedRouter>} />
           <Route path="/album/:id" element={<ProtectedRouter><AlbumPage /></ProtectedRouter>} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/auth" element={!isLoggedIn ? <Auth /> : <Navigate to="/" />} />
         </Routes>
         {errorMessage ? <ErrorModalWindow error={errorMessage} /> : ''}
       </GlobalContainer>

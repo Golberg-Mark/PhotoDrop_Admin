@@ -21,8 +21,15 @@ class HttpClient {
   private responseSuccess = (response: AxiosResponse) => response.data;
 
   private responseError = (error: any) => {
+    const status = error.response.status;
+
+    if (status === 0 || status === 401) {
+      localStorage.removeItem('token');
+      window.location.replace('/auth');
+    }
+
     return Promise.reject({
-      code: error.response.status,
+      code: status,
       message: error.response.data?.message || ''
     });
   };
