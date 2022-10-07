@@ -47,7 +47,6 @@ export const getAlbumsAction = (): AsyncAction => async (
     if (albums) dispatch(userActions.setAlbums(albums));
   } catch (error: any) {
     console.log(error);
-    if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
   }
 };
 
@@ -71,7 +70,6 @@ export const createAlbumAction = (album: Omit<Album, 'id'>): AsyncAction => asyn
     }
   } catch (error: any) {
     console.log(error);
-    if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
     dispatch(userActions.setIsAlbumCreating(false));
   }
 };
@@ -87,7 +85,6 @@ export const getSelectedAlbumAction = (albumName: string): AsyncAction => async 
     if (album) dispatch(userActions.setSelectedAlbum(album));
   } catch (error: any) {
     console.log(error);
-    if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
   }
 };
 
@@ -136,7 +133,7 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
         }).then(__ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
           if (i === photos.length - 1) lastPhotoLoaded();
-        }).catch(err => {
+        }).catch(_ => {
           photoWithErrors += `"${photo.name}", `;
           ++photoWithErrorsAmount;
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
@@ -147,7 +144,6 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
     }
   } catch (error: any) {
     console.log(error);
-    if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
   }
 };
 
@@ -164,6 +160,5 @@ export const searchClientAction = (number: string): AsyncAction => async (
     } else dispatch(userActions.setClients(null));
   } catch (error: any) {
     console.log(error);
-    if (error.code === 401 || error.code === 0) dispatch(userActions.setIsLoggedIn(false));
   }
 };
