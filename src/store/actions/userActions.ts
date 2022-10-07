@@ -130,7 +130,7 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
           headers: {
             'Content-Type': contentType
           }
-        }).then(__ => {
+        }).then(_ => {
           dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
           if (i === photos.length - 1) lastPhotoLoaded();
         }).catch(_ => {
