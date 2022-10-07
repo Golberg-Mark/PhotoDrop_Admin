@@ -28,11 +28,21 @@ const AlbumContainer = styled.div`
   padding: 20px 10px;
   border-bottom: 1px solid #DDD;
   cursor: pointer;
-  
+
   :last-child {
     border-bottom: none;
   }
-  
+
+  :hover {
+    p {
+      transition: .1s ease-in-out;
+      
+      :first-child {
+        color: rgba(51, 0, 204, 0.7);
+      }
+    }
+  }
+
   @media (min-width: 768px) {
     max-width: 800px;
     min-width: 500px;
