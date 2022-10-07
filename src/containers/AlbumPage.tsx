@@ -61,11 +61,12 @@ const AlbumPage = () => {
   }, [isLoadingFinished]);
 
   const choosePhotos = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.files?.length) {
+    if (evt.target.files) {
       const files: File[] = [];
 
       for (let i = 0; i < evt.target.files.length; i++) {
-        files.push(evt.target.files.item(i) as File);
+        const file = evt.target.files[i]
+        if (new RegExp(/^image\/.*$/).test(file.type)) files.push(file);
       }
 
       setPhotos(files);
@@ -144,6 +145,7 @@ const AlbumPage = () => {
                 type="file"
                 style={{ display: 'none' }}
                 onChange={choosePhotos}
+                accept="image/*"
                 multiple
               />
             </StyledLabel>
