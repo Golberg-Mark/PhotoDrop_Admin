@@ -4,8 +4,9 @@ import { Album, PhoneNumber, SelectedAlbum, UserReducer } from '@/store/reducers
 import { LoginData } from '@/api/mainApi';
 import { AsyncAction } from '@/store/actions/common';
 import { errorActions } from '@/store/actions/errorActions';
-import axios from 'axios';
 import { push } from '@lagunovsky/redux-react-router';
+import Uppy from '@uppy/core';
+import AwsS3 from '@uppy/aws-s3';
 
 export const userActions = createActionCreators(UserReducer);
 
@@ -15,7 +16,11 @@ export type UserActions =
   | ReturnType<typeof userActions.setSelectedAlbum>
   | ReturnType<typeof userActions.setIsAlbumCreating>
   | ReturnType<typeof userActions.setLoadedPhotosCount>
-  | ReturnType<typeof userActions.setClients>;
+  | ReturnType<typeof userActions.setPhotosProgress>
+  | ReturnType<typeof userActions.setIsLoadingCompleted>
+  | ReturnType<typeof userActions.setFailedPhotos>
+  | ReturnType<typeof userActions.setClients>
+  | ReturnType<typeof userActions.clearLoadingSession>;
 
 export const loginAction  = (data: LoginData): AsyncAction => async (
   dispatch,
@@ -94,54 +99,64 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
   { mainApiProtected }
 ) => {
   try {
-    let loadedPhotosCount = 0;
-    let photoWithErrors = '';
-    let photoWithErrorsAmount = 0;
-    dispatch(userActions.setLoadedPhotosCount(loadedPhotosCount));
+    dispatch(userActions.setIsLoadingCompleted(false));
+    dispatch(userActions.setLoadedPhotosCount(1));
+    dispatch(userActions.setPhotosProgress(0));
+    let uploadedAmount = 0;
 
-    const lastPhotoLoaded = () => {
-      setTimeout(() => {
-        if (photoWithErrors.length) {
-          photoWithErrors = `Your ${photoWithErrorsAmount} photos ${photoWithErrors.substring(0, photoWithErrors.length - 2)} weren't loaded`;
-          dispatch(errorActions.setErrorMessage(photoWithErrors));
-        }
+    const uppy = new Uppy();
 
-        const { selectedAlbum } = getState().userReducer;
-        dispatch(userActions.setSelectedAlbum({
-          ...selectedAlbum,
-          countPhotos: selectedAlbum!.countPhotos + loadedPhotosCount - photoWithErrorsAmount
-        } as SelectedAlbum));
-      }, 1000);
-    };
+    uppy.on('progress', (progress => {
+      dispatch(userActions.setPhotosProgress(progress));
+    }));
+    uppy.on('upload-success', () => {
+      dispatch(userActions.setLoadedPhotosCount(++uploadedAmount));
+    });
 
-    for (const photo of photos) {
-      const i = photos.indexOf(photo);
+    photos.forEach((photo, i) => {
       const splitName = photo.name.split('.');
-      const contentType = photo.type || `image/${splitName[splitName.length - 1]}`;
+      uppy.addFile({
+        name: photo.name,
+        type: photo.type || `image/${splitName[splitName.length - 1]}`,
+        data: new Blob([photo]),
+        meta: {
+          isLast: i === photos.length - 1
+        }
+      });
+    });
 
-      const url = await mainApiProtected.getPreassignedUrl({
-        contentType,
-        isLast: i === photos.length - 1,
-        numbers
-      }, id);
-
-      if (url) {
-        axios.put(url, photo, {
+    uppy.use(AwsS3, {
+      async getUploadParameters(file) {
+        return await mainApiProtected.getPreassignedUrl({
+          contentType: file.type!,
+          isLast: file.meta.isLast as boolean,
+          numbers
+        }, id).then(url => ({
+          method: 'PUT',
           headers: {
-            'Content-Type': contentType
-          }
-        }).then(_ => {
-          dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
-          if (i === photos.length - 1) lastPhotoLoaded();
-        }).catch(_ => {
-          photoWithErrors += `"${photo.name}", `;
-          ++photoWithErrorsAmount;
-          dispatch(userActions.setLoadedPhotosCount(++loadedPhotosCount));
-
-          if (i === photos.length - 1) lastPhotoLoaded();
-        });
+            'Content-Type': file.type!
+          },
+          url
+        }));
       }
-    }
+    });
+
+    uppy.upload().then(result => {
+      dispatch(userActions.setIsLoadingCompleted(true));
+      dispatch(userActions.setLoadedPhotosCount(null));
+
+      const { selectedAlbum } = getState().userReducer;
+
+      dispatch(userActions.setSelectedAlbum({
+        ...selectedAlbum,
+        countPhotos: selectedAlbum!.countPhotos + result.successful.length
+      } as SelectedAlbum));
+
+      if (result.failed.length) {
+        const failedPhotos = result.failed.map((el) => el.name);
+        dispatch(userActions.setFailedPhotos(failedPhotos));
+      }
+    });
   } catch (error: any) {
     console.log(error);
   }

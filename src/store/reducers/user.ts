@@ -27,6 +27,9 @@ interface UserState {
   isHeaderVisible: boolean,
   isAlbumCreating: boolean,
   loadedPhotosCount: number | null,
+  photosProgress: number | null,
+  isLoadingCompleted: boolean | null,
+  failedPhotos: string[] | null,
   clients: Client[] | null
 }
 
@@ -37,6 +40,9 @@ const InitialState: UserState = {
   isHeaderVisible: true,
   isAlbumCreating: false,
   loadedPhotosCount: null,
+  photosProgress: null,
+  isLoadingCompleted: null,
+  failedPhotos: null,
   clients: null
 }
 
@@ -65,8 +71,28 @@ export class UserReducer extends ImmerReducer<UserState> {
     this.draftState.loadedPhotosCount = value;
   }
 
+  setPhotosProgress(value: number | null) {
+    this.draftState.photosProgress = value;
+  }
+
+  setIsLoadingCompleted(value: boolean | null) {
+    this.draftState.isLoadingCompleted = value;
+  }
+
+  setFailedPhotos(value: string[] | null) {
+    this.draftState.failedPhotos = value;
+  }
+
   setClients(value: Client[] | null) {
     this.draftState.clients = value;
+  }
+
+  clearLoadingSession(withFailedPhotos: boolean = false) {
+    this.draftState.isLoadingCompleted = null;
+    this.draftState.loadedPhotosCount = null;
+    this.draftState.photosProgress = null;
+
+    if (withFailedPhotos) this.draftState.failedPhotos = null;
   }
 }
 

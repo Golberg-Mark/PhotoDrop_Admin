@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 
-import { selectAlbum, selectLoadedPhotosCount } from '@/store/selectors/userSelector';
+import {
+  selectAlbum,
+  selectIsLoadingCompleted
+} from '@/store/selectors/userSelector';
 import PageWrapper from '@/components/PageWrapper';
 import Loader from '@/components/Loader';
 import { getSelectedAlbumAction, uploadPhotoAction, userActions } from '@/store/actions/userActions';
 import InputNumber from '@/components/InputNumber';
 import Button from '@/components/Button';
 import useToggle from '@/hooks/useToggle';
-import SuccessIcon from '@/icons/SuccessIcon';
 import { Client } from '@/store/reducers/user';
+import UploadingProgressWindow from '@/components/UploadingProgressWindow';
 
 const AlbumPage = () => {
   const [numbers, setNumbers] = useState<Client[]>([{
@@ -22,10 +25,12 @@ const AlbumPage = () => {
   const [focusedInput, setFocusedInput] = useState<number>();
   const [isLoadingFinished, toggleIsLoadingFinished] = useToggle();
   const [isLoading, toggleIsLoading] = useToggle();
+
+  const album = useSelector(selectAlbum);
+  const isLoadingCompleted = useSelector(selectIsLoadingCompleted);
+
   const params = useParams();
   const dispatch = useDispatch();
-  const album = useSelector(selectAlbum);
-  const loadedPhotosCount = useSelector(selectLoadedPhotosCount);
 
   useEffect(() => {
     dispatch(getSelectedAlbumAction(params.id!));
@@ -36,16 +41,15 @@ const AlbumPage = () => {
   }, []);
 
   useEffect(() => {
-    if (loadedPhotosCount === photos?.length) {
+    if (isLoadingCompleted) {
       toggleIsLoadingFinished(true);
       setPhotos([]);
       setNumbers([{
         countryCode: '',
         phoneNumber: ''
       }]);
-      dispatch(userActions.setLoadedPhotosCount(null));
     }
-  }, [loadedPhotosCount]);
+  }, [isLoadingCompleted]);
 
   useEffect(() => {
     if (isLoadingFinished) {
@@ -65,8 +69,10 @@ const AlbumPage = () => {
       const files: File[] = [];
 
       for (let i = 0; i < evt.target.files.length; i++) {
-        const file = evt.target.files[i]
-        if (new RegExp(/^image\/.*$/).test(file.type)) files.push(file);
+        const file = evt.target.files[i];
+        const splitName = file.name.split('.');
+        const type = file.type || `image/${splitName[splitName.length - 1]}`;
+        if (new RegExp(/^image\/.*$/).test(type)) files.push(file);
       }
 
       setPhotos(files);
@@ -147,7 +153,8 @@ const AlbumPage = () => {
                 type="file"
                 style={{ display: 'none' }}
                 onChange={choosePhotos}
-                accept="image/*"
+                accept="image/*,.heic,.heif"
+                id="Uppy"
                 multiple
               />
             </StyledLabel>
@@ -157,16 +164,7 @@ const AlbumPage = () => {
           </Buttons>
         </PageContent>
       ) : <Loader />}
-      {loadedPhotosCount && photos ? (
-        <UploadedPhotos>
-          {`${loadedPhotosCount}/${photos.length}`}
-        </UploadedPhotos>
-      ) : null}
-      {isLoadingFinished ? (
-        <UploadedPhotos>
-          <SuccessIcon />
-        </UploadedPhotos>
-      ) : null}
+      <UploadingProgressWindow totalPhotos={photos?.length}/>
     </PageWrapper>
   );
 };
@@ -211,30 +209,6 @@ const StyledLabel = styled.label`
 
   :hover {
     opacity: .7;
-  }
-`;
-
-const UploadedPhotos = styled.div`
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  padding: 10px 20px;
-  height: 52px;
-  border: 1px solid #CCC;
-  border-radius: 10px;
-  background-color: #FFF;
-
-  ::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    top: 50%;
-    right: 0;
-    border-top: 1px solid #CCC;
-    border-right: 1px solid #CCC;
-    transform: rotate(45deg) translate(0%, -75%);
-    background-color: #FFF;
   }
 `;
 

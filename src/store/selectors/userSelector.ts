@@ -34,6 +34,21 @@ export const selectLoadedPhotosCount: Selector<State, number | null> = createSel
   ({ loadedPhotosCount }) => loadedPhotosCount
 );
 
+export const selectPhotosProgress: Selector<State, number | null> = createSelector(
+  userState,
+  ({ photosProgress }) => photosProgress
+);
+
+export const selectIsLoadingCompleted: Selector<State, boolean | null> = createSelector(
+  userState,
+  ({ isLoadingCompleted }) => isLoadingCompleted
+);
+
+export const selectFailedPhotos: Selector<State, string[] | null> = createSelector(
+  userState,
+  ({ failedPhotos }) => failedPhotos
+);
+
 export const selectClients: Selector<State, Client[] | null> = createSelector(
   userState,
   ({ clients }) => clients

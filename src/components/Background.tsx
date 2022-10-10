@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Props extends React.ComponentProps<any>{
-  onClick: () => void
+  onClick?: () => void
 }
 
 const Background: React.FC<Props> = ({ onClick, children }) => {
