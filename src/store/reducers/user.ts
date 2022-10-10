@@ -93,7 +93,7 @@ export class UserReducer extends ImmerReducer<UserState> {
   startUploadingSession() {
     this.draftState.isUploadingSessionExist = true;
     this.draftState.isLoadingCompleted = false;
-    this.draftState.loadedPhotosCount = 1;
+    this.draftState.loadedPhotosCount = 0;
     this.draftState.photosProgress = 0;
   }
 

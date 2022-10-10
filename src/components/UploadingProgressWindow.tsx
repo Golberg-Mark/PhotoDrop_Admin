@@ -56,7 +56,7 @@ const UploadingProgressWindow: React.FC<Props> = ({ totalPhotos }) => {
         {progressExist && loadedPhotosCountExist ? (
           <>
             <InfoText>
-              {`Loading ${loadedPhotosCount} of ${totalPhotos!}`}
+              {`Loading ${loadedPhotosCount + 1} of ${totalPhotos!}`}
             </InfoText>
             <ProgressBar value={totalProgress} >
               <ProgressValue value={totalProgress} />
