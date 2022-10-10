@@ -20,6 +20,7 @@ export type UserActions =
   | ReturnType<typeof userActions.setIsLoadingCompleted>
   | ReturnType<typeof userActions.setFailedPhotos>
   | ReturnType<typeof userActions.setClients>
+  | ReturnType<typeof userActions.startUploadingSession>
   | ReturnType<typeof userActions.clearLoadingSession>;
 
 export const loginAction  = (data: LoginData): AsyncAction => async (
@@ -99,9 +100,7 @@ export const uploadPhotoAction = (numbers: PhoneNumber[], photos: File[], id: st
   { mainApiProtected }
 ) => {
   try {
-    dispatch(userActions.setIsLoadingCompleted(false));
-    dispatch(userActions.setLoadedPhotosCount(1));
-    dispatch(userActions.setPhotosProgress(0));
+    dispatch(userActions.startUploadingSession());
     let uploadedAmount = 0;
 
     const uppy = new Uppy();

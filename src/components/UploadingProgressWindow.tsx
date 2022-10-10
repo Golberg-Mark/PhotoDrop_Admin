@@ -34,7 +34,7 @@ const UploadingProgressWindow: React.FC<Props> = ({ totalPhotos }) => {
   const failedPhotosExist = failedPhotos !== null;
   const itShouldBeRendered = loadedPhotosCountExist || progressExist || failedPhotosExist;
 
-  return  itShouldBeRendered ? (
+  return itShouldBeRendered ? (
     <Background
       onClick={isLoadingCompleted ? close : undefined}
       style={{ cursor: isLoadingCompleted ? 'pointer' : 'default' }}

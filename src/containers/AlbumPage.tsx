@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import {
   selectAlbum,
-  selectIsLoadingCompleted
+  selectIsLoadingCompleted, selectIsUploadingSessionExist
 } from '@/store/selectors/userSelector';
 import PageWrapper from '@/components/PageWrapper';
 import Loader from '@/components/Loader';
@@ -28,6 +28,7 @@ const AlbumPage = () => {
 
   const album = useSelector(selectAlbum);
   const isLoadingCompleted = useSelector(selectIsLoadingCompleted);
+  const isUploadingSessionExist = useSelector(selectIsUploadingSessionExist);
 
   const params = useParams();
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const AlbumPage = () => {
   useEffect(() => {
     if (isLoadingCompleted) {
       toggleIsLoadingFinished(true);
+      toggleIsLoading(false);
       setPhotos([]);
       setNumbers([{
         countryCode: '',
@@ -50,19 +52,6 @@ const AlbumPage = () => {
       }]);
     }
   }, [isLoadingCompleted]);
-
-  useEffect(() => {
-    if (isLoadingFinished) {
-      toggleIsLoading(false);
-      const timer = setTimeout(() => {
-        toggleIsLoadingFinished(false);
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-      }
-    }
-  }, [isLoadingFinished]);
 
   const choosePhotos = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (evt.target.files) {
@@ -164,7 +153,7 @@ const AlbumPage = () => {
           </Buttons>
         </PageContent>
       ) : <Loader />}
-      <UploadingProgressWindow totalPhotos={photos?.length}/>
+      {isUploadingSessionExist ? <UploadingProgressWindow totalPhotos={photos?.length}/> : ''}
     </PageWrapper>
   );
 };

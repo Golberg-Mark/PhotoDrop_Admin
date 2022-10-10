@@ -49,6 +49,11 @@ export const selectFailedPhotos: Selector<State, string[] | null> = createSelect
   ({ failedPhotos }) => failedPhotos
 );
 
+export const selectIsUploadingSessionExist: Selector<State, boolean> = createSelector(
+  userState,
+  ({ isUploadingSessionExist }) => isUploadingSessionExist
+);
+
 export const selectClients: Selector<State, Client[] | null> = createSelector(
   userState,
   ({ clients }) => clients

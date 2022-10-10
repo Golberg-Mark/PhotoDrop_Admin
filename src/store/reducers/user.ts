@@ -1,4 +1,5 @@
 import { ImmerReducer, createReducerFunction } from 'immer-reducer';
+import { userActions } from '@/store/actions/userActions';
 
 export interface Album {
   name: string,
@@ -30,6 +31,7 @@ interface UserState {
   photosProgress: number | null,
   isLoadingCompleted: boolean | null,
   failedPhotos: string[] | null,
+  isUploadingSessionExist: boolean,
   clients: Client[] | null
 }
 
@@ -43,6 +45,7 @@ const InitialState: UserState = {
   photosProgress: null,
   isLoadingCompleted: null,
   failedPhotos: null,
+  isUploadingSessionExist: false,
   clients: null
 }
 
@@ -87,12 +90,22 @@ export class UserReducer extends ImmerReducer<UserState> {
     this.draftState.clients = value;
   }
 
-  clearLoadingSession(withFailedPhotos: boolean = false) {
+  startUploadingSession() {
+    this.draftState.isUploadingSessionExist = true;
+    this.draftState.isLoadingCompleted = false;
+    this.draftState.loadedPhotosCount = 1;
+    this.draftState.photosProgress = 0;
+  }
+
+  clearLoadingSession(isCloseSession: boolean = false) {
     this.draftState.isLoadingCompleted = null;
     this.draftState.loadedPhotosCount = null;
     this.draftState.photosProgress = null;
 
-    if (withFailedPhotos) this.draftState.failedPhotos = null;
+    if (isCloseSession) {
+      this.draftState.failedPhotos = null;
+      this.draftState.isUploadingSessionExist = false;
+    }
   }
 }
 
