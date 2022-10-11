@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const AlbumsSkeleton: React.FC<any> = (props) => {
   return (
     <StyledSkeleton
-      height={1200}
+      height={400}
       backgroundColor="#d9d9d9"
       foregroundColor="#ebeaea"
       {...props}
