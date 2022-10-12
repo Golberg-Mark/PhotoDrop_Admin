@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import useInput from '@/hooks/useInput';
 import formatPhoneNumber from '@/utils/formatPhoneNumber';
-import useToggle from '@/hooks/useToggle';
-import { useDispatch, useSelector } from 'react-redux';
+import useToggle, { HandleToggle } from '@/hooks/useToggle';
 import { selectClients } from '@/store/selectors/userSelector';
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 import { searchClientAction, userActions } from '@/store/actions/userActions';
@@ -14,10 +14,17 @@ interface Props {
   phonePosition: number,
   isFocused: boolean,
   loadingFinished: boolean,
+  toggleIsLoadingFinished: HandleToggle,
   onChange: (i: number, phoneObj: Client) => void
 }
 
-const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinished, onChange }) => {
+const InputNumber: React.FC<Props> = ({
+  phonePosition,
+  isFocused,
+  loadingFinished,
+  toggleIsLoadingFinished,
+  onChange
+}) => {
   const dispatch = useDispatch();
 
   const [selectedCode, setSelectedCode] = useInput('+', 5, 'code', 1);
@@ -60,9 +67,9 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
 
   useEffect(() => {
     if (loadingFinished) {
-      dispatch(userActions.setClients(null));
       setSelectedCode('+');
       setPhoneNumber('');
+      toggleIsLoadingFinished(false);
     }
   }, [loadingFinished]);
 
@@ -93,14 +100,14 @@ const InputNumber: React.FC<Props> = ({ phonePosition, isFocused, loadingFinishe
 
 const StyledInputNumber = styled.div`
   position: relative;
-  margin-bottom: 10px;
+  margin: 0 auto 10px;
+  max-width: 420px;
   height: 42px;
 `;
 
 const InputContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 3.2fr;
-  max-width: 420px;
 `;
 
 const StyledPhoneInput = styled.input`

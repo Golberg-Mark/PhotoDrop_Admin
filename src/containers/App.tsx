@@ -10,11 +10,11 @@ import Header from '@/components/Header';
 import FuturaPtRegular from '@/fonts/futura-pt-book.ttf';
 import FuturaPtBold from '@/fonts/futura-pt-bold.ttf';
 import FuturaPtMedium from '@/fonts/futura-pt-medium.ttf';
-import AlbumPage from '@/containers/AlbumPage';
 import { selectErrorMessage } from '@/store/selectors/errorSelector';
 import ErrorModalWindow from '@/containers/ErrorModalWindow';
 import ProtectedRouter from '@/containers/ProtectedRouter';
 import { selectIsLoggedIn } from '@/store/selectors/userSelector';
+import AlbumPage from '@/containers/AlbumPage';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize};

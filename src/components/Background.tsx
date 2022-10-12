@@ -24,7 +24,7 @@ const StyledBackground = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, .4);
   cursor: pointer;
-  z-index: 1000;
+  z-index: 10000;
 `;
 
 export default Background;
